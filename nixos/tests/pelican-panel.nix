@@ -9,7 +9,7 @@
 
       services.pelican-panel = {
         enable = true;
-        port = 8080;
+        caddyPort = 8080;
         secretEnvironmentFile = pkgs.writeText "pelican-test-secrets.env" ''
           APP_KEY="base64:QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE="
         '';

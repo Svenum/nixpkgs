@@ -35,7 +35,7 @@ pelican-artisan p:user:make --admin
 
 The `secretEnvironmentFile` option has to be set to the absolute path of a file that exists. Please use a [proper secret management scheme](https://wiki.nixos.org/wiki/Comparison_of_secret_managing_schemes) to provide it.
 
-By default, the panel runs using Caddy on an insecure port ([](#opt-services.pelican-panel.port)). Caddy will not listen on ports 80 and 443.
+By default, the panel runs using Caddy on an insecure port ([](#opt-services.pelican-panel.caddyPort)). Caddy will not listen on ports 80 and 443.
 This is so you can use any reverse proxy, even another webserver like nginx.
 
 ## Environment {#module-pelican-panel-environment}
