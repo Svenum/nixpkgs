@@ -148,10 +148,15 @@ in
       description = "Path to a .env file containing secret configuration values. Merged before configuration at runtime so its values take precedence.";
     };
 
-    port = mkOption {
+    caddyPort = mkOption {
       type = types.port;
       default = 8081;
-      description = "The port caddy listens on";
+      description = "The port caddy listens on.";
+    };
+    caddyDomain = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      description = "The domain caddy listens on.";
     };
   };
 
@@ -233,10 +238,10 @@ in
 
         virtualHosts =
           let
-            domain = optionalString (!cfg.enableTraefik && cfg.domain != null) "${cfg.domain}";
+            domain = optionalString (!cfg.enableTraefik && cfg.caddyDomain != null) "${cfg.caddyDomain}";
           in
           {
-            "${domain}:${toString cfg.port}".extraConfig = ''
+            "${domain}:${toString cfg.caddyPort}".extraConfig = ''
               root * /var/lib/pelican/www/public
               encode gzip
               file_server
@@ -256,7 +261,7 @@ in
 
           services.pelican.loadBalancer = {
             passHostHeader = true;
-            servers = [ { url = "http://127.0.0.1:${toString cfg.port}"; } ];
+            servers = [ { url = "http://127.0.0.1:${toString cfg.caddyPort}"; } ];
           };
         };
       };
@@ -338,7 +343,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = optional (!cfg.enableTraefik) cfg.port;
+      allowedTCPPorts = optional (!cfg.enableTraefik) cfg.caddyPort;
     };
 
     environment.systemPackages = [ artisan ];
